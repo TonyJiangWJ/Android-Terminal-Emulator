@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "jackpal.androidterm"
@@ -11,8 +11,14 @@ android {
 
         ndk {
             moduleName "libjackpal-androidterm5"
-            abiFilters 'armeabi', 'mips', 'x86'
+            abiFilters "arm64-v8a", "armeabi-v7a", "x86", "x86_64"
             ldLibs "log"
+        }
+        externalNativeBuild {
+            cmake {
+                cppFlags ''
+                arguments"-DANDROID_STL=c++_shared"
+            }
         }
     }
 
@@ -27,9 +33,24 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
+    externalNativeBuild {
+        cmake {
+            path file('src/main/jni/CMakeLists.txt')
+            version '3.10.2'
+        }
+    }
+
+    ndkVersion "22.0.7026061"
 }
 
 dependencies {
-    compile project(':emulatorview')
-    compile project(':libtermexec')
+    api project(':emulatorview')
+    api project(':libtermexec')
 }

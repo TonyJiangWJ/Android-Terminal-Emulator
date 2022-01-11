@@ -5,3 +5,6 @@
 .DS_Store
 /build
 *.iml
+.idea/
+.cxx/
+gradle.properties
